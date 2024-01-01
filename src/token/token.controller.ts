@@ -21,8 +21,8 @@ export class TokenController {
     );
   }
 
-  @Get()
-  getCurrencies(): string {
-    return 'hello';
+  @Get('currencies')
+  async getCurrencies(): Promise<Array<string>> {
+    return await this.tokenService.getCurrencies();
   }
 }

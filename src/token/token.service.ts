@@ -81,4 +81,25 @@ export class TokenService {
       );
     }
   }
+
+  async getCurrencies(): Promise<Array<string>> {
+    try {
+      const response = await axios.get(
+        `${this.apiUrl}/simple/supported_vs_currencies`,
+      );
+
+      return response.data;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Currencies api failed',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        {
+          cause: error,
+        },
+      );
+    }
+  }
 }
