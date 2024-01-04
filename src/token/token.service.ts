@@ -49,15 +49,12 @@ export class TokenService {
     targetCurrency: string,
   ): Promise<ConvertToken> {
     try {
-      const response = await axios.get(
-        `https://api.coingecko.com/api/v3/simple/price`,
-        {
-          params: {
-            ids: sourceCrypto,
-            vs_currencies: targetCurrency,
-          },
+      const response = await axios.get(`${this.apiUrl}/simple/price`, {
+        params: {
+          ids: sourceCrypto,
+          vs_currencies: targetCurrency,
         },
-      );
+      });
 
       const exchangeRate = response.data[sourceCrypto][targetCurrency];
       const convertedAmount = amount * exchangeRate;
