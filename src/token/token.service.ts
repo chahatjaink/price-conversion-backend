@@ -8,6 +8,10 @@ export class TokenService {
   constructor(private readonly configService: ConfigService) {}
 
   apiUrl = this.configService.get<string>('apiUrl');
+  headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  };
 
   async getTop100Tokens(): Promise<Token[]> {
     try {
@@ -18,6 +22,7 @@ export class TokenService {
           page: 1,
           sparkline: false,
         },
+        headers: this.headers,
       });
 
       const top100 = response.data.map((token) => ({
@@ -53,7 +58,9 @@ export class TokenService {
         params: {
           ids: sourceCrypto,
           vs_currencies: targetCurrency,
+          precision: 5,
         },
+        headers: this.headers,
       });
 
       const exchangeRate = response.data[sourceCrypto][targetCurrency];
@@ -69,7 +76,7 @@ export class TokenService {
       throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: 'Convert api failed',
+          error: 'Conversion API failed',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
         {
@@ -83,6 +90,9 @@ export class TokenService {
     try {
       const response = await axios.get(
         `${this.apiUrl}/simple/supported_vs_currencies`,
+        {
+          headers: this.headers,
+        },
       );
 
       return response.data;
